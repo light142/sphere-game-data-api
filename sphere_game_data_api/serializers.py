@@ -65,7 +65,10 @@ class GameDataSerializer(serializers.ModelSerializer):
                 'help_text': 'Game mode (e.g., classic, timed, multiplayer)'
             },
             'game_color': {
-                'help_text': 'Primary game color theme'
+                'help_text': 'Primary game color theme (optional)',
+                'allow_blank': True,
+                'required': False,
+                'allow_null': True
             },
             'game_sequence': {
                 'help_text': 'Array of game sequence colors (e.g., ["red", "blue", "green"])'
