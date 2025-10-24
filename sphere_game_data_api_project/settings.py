@@ -155,7 +155,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
@@ -184,15 +183,9 @@ SWAGGER_SETTINGS = {
             "name": "Authorization",
             "in": "header",
             "description": "Enter your auth token (e.g., 2033413e311925d9a24241cbf8665fca99168f19)",
-        },
-        "Session": {
-            "type": "apiKey",
-            "name": "X-CSRFToken",
-            "in": "header",
-            "description": "CSRF token for session authentication",
         }
     },
-    "USE_SESSION_AUTH": True,
+    "USE_SESSION_AUTH": False,
     "SECURITY_REQUIREMENTS": [
         {
             "Token": []
@@ -204,14 +197,5 @@ SWAGGER_SETTINGS = {
         "filter": True,
         "showExtensions": True,
         "showCommonExtensions": True,
-    },
-    "CUSTOM_FIELDS": {
-        "Authorization": {
-            "description": "Enter your auth token (e.g., 2033413e311925d9a24241cbf8665fca99168f19)",
-            "x-schema": {
-                "type": "string",
-                "example": "2033413e311925d9a24241cbf8665fca99168f19"
-            }
-        }
     },
 }
