@@ -36,7 +36,6 @@ class GameDataSerializer(serializers.ModelSerializer):
             "game_mode", 
             "game_color", 
             "correct_game_color",
-            "is_correct_color",
             "game_sequence", 
             "game_player_input",
             "retry_count",
@@ -79,10 +78,6 @@ class GameDataSerializer(serializers.ModelSerializer):
             'correct_game_color': {
                 'help_text': 'The correct color for this event (for player selection events)',
                 'allow_blank': True,
-                'required': False
-            },
-            'is_correct_color': {
-                'help_text': 'Whether the player selected the correct color (true/false)',
                 'required': False
             },
             'game_sequence': {
