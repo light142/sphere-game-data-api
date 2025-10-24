@@ -183,7 +183,7 @@ SWAGGER_SETTINGS = {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header",
-            "description": "Enter 'Token <your-auth-token>'",
+            "description": "Enter your auth token (e.g., 2033413e311925d9a24241cbf8665fca99168f19)",
         },
         "Session": {
             "type": "apiKey",
@@ -198,4 +198,20 @@ SWAGGER_SETTINGS = {
             "Token": []
         }
     ],
+    "SWAGGER_UI_SETTINGS": {
+        "persistAuthorization": True,
+        "displayRequestDuration": True,
+        "filter": True,
+        "showExtensions": True,
+        "showCommonExtensions": True,
+    },
+    "CUSTOM_FIELDS": {
+        "Authorization": {
+            "description": "Enter your auth token (e.g., 2033413e311925d9a24241cbf8665fca99168f19)",
+            "x-schema": {
+                "type": "string",
+                "example": "2033413e311925d9a24241cbf8665fca99168f19"
+            }
+        }
+    },
 }
