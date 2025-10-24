@@ -5,6 +5,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
+import logging
+
+logger = logging.getLogger(__name__)
 
 from sphere_game_data_api.models import GameData
 from sphere_game_data_api.permissions import IsAdminOrReadOnly
@@ -91,11 +95,26 @@ class GameDataListCreateView(generics.ListCreateAPIView):
     @swagger_auto_schema(
         operation_description="Create a new game data entry (Anyone can create)",
         request_body=GameDataSerializer,
-        responses={201: GameDataSerializer},
+        responses={
+            201: GameDataSerializer,
+            400: "Bad Request - Invalid data",
+            500: "Internal Server Error"
+        },
         security=[]
     )
     def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+        try:
+            return super().post(request, *args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error creating game data: {e}")
+            return Response(
+                {
+                    'error': True,
+                    'message': 'Failed to create game data',
+                    'details': str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class GameDataRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -105,11 +124,26 @@ class GameDataRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(
         operation_description="Retrieve game data by ID (Admin only)", 
-        responses={200: GameDataSerializer},
+        responses={
+            200: GameDataSerializer,
+            404: "Game data not found",
+            401: "Authentication required"
+        },
         security=[{"Token": []}]
     )
     def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        try:
+            return super().get(request, *args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error retrieving game data: {e}")
+            return Response(
+                {
+                    'error': True,
+                    'message': 'Failed to retrieve game data',
+                    'details': str(e)
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
     @swagger_auto_schema(
         operation_description="Update game data by ID (Admin only)",

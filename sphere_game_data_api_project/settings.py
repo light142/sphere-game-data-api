@@ -160,6 +160,19 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
+    # Error handling configuration
+    "EXCEPTION_HANDLER": "sphere_game_data_api.exceptions.custom_exception_handler",
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle"
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "1000/hour",
+        "user": "2000/hour"
+    }
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
