@@ -46,21 +46,6 @@ class AuthAPITestCase(APITestCase):
 
 class GameDataAPITestCase(APITestCase):
     def setUp(self):
-        # Create test game data
-        self.game_data = GameData.objects.create(
-            event_at=timezone.now(),
-            event_type="game_start",
-            ip_address="192.168.1.1",
-            mac_address="AA:BB:CC:DD:EE:FF",
-            session_id="test_session_123",
-            game_reference="game_ref_001",
-            game_level=1,
-            game_mode="classic",
-            game_color="blue",
-            game_sequence=["red", "blue", "green"],
-            game_player_input=["red", "blue"]
-        )
-        
         # Create admin user for admin-only tests
         self.admin_user = User.objects.create_user(
             username="admin_test",
@@ -88,7 +73,7 @@ class GameDataAPITestCase(APITestCase):
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(GameData.objects.count(), 2)
+        self.assertEqual(GameData.objects.count(), 1)
 
     def test_list_game_data_anonymous_denied(self):
         """Test that anonymous users cannot list game data"""
@@ -98,6 +83,21 @@ class GameDataAPITestCase(APITestCase):
 
     def test_list_game_data_admin_allowed(self):
         """Test that admin users can list game data"""
+        # First create some test data
+        GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
         url = reverse("game-data-list-create")
         response = self.client.get(url)
@@ -106,53 +106,113 @@ class GameDataAPITestCase(APITestCase):
 
     def test_retrieve_game_data_anonymous_denied(self):
         """Test that anonymous users cannot retrieve game data"""
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_retrieve_game_data_admin_allowed(self):
         """Test that admin users can retrieve game data"""
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["event_type"], "game_start")
+        self.assertEqual(response.data["event_type"], "test_event")
 
     def test_update_game_data_anonymous_denied(self):
         """Test that anonymous users cannot update game data"""
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         data = {
             "event_at": "2024-01-01T12:00:00Z",
             "event_type": "game_pause",
             "ip_address": "192.168.1.1",
             "mac_address": "AA:BB:CC:DD:EE:FF",
             "session_id": "test_session_123",
-            "game_reference": "game_ref_001",
+            "game_reference": "test_ref_001",
             "game_level": 1,
-            "game_mode": "classic",
+            "game_mode": "test",
             "game_color": "blue",
-            "game_sequence": ["red", "blue", "green"],
-            "game_player_input": ["red", "blue"]
+            "game_sequence": ["red", "blue"],
+            "game_player_input": ["red"]
         }
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_game_data_admin_allowed(self):
         """Test that admin users can update game data"""
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         data = {
             "event_at": "2024-01-01T12:00:00Z",
             "event_type": "game_pause",
             "ip_address": "192.168.1.1",
             "mac_address": "AA:BB:CC:DD:EE:FF",
             "session_id": "test_session_123",
-            "game_reference": "game_ref_001",
+            "game_reference": "test_ref_001",
             "game_level": 1,
-            "game_mode": "classic",
+            "game_mode": "test",
             "game_color": "blue",
-            "game_sequence": ["red", "blue", "green"],
-            "game_player_input": ["red", "blue"]
+            "game_sequence": ["red", "blue"],
+            "game_player_input": ["red"]
         }
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -160,14 +220,44 @@ class GameDataAPITestCase(APITestCase):
 
     def test_delete_game_data_anonymous_denied(self):
         """Test that anonymous users cannot delete game data"""
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_game_data_admin_allowed(self):
         """Test that admin users can delete game data"""
+        # Create test data first
+        game_data = GameData.objects.create(
+            event_at=timezone.now(),
+            event_type="test_event",
+            ip_address="192.168.1.1",
+            mac_address="AA:BB:CC:DD:EE:FF",
+            session_id="test_session_123",
+            game_reference="test_ref_001",
+            game_level=1,
+            game_mode="test",
+            game_color="blue",
+            game_sequence=["red", "blue"],
+            game_player_input=["red"]
+        )
+        
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
-        url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
+        url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(GameData.objects.count(), 0)
