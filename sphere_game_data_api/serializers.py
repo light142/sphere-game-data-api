@@ -35,5 +35,7 @@ class GameDataSerializer(serializers.ModelSerializer):
             "game_mode", 
             "game_color", 
             "game_sequence", 
-            "game_player_input"
+            "game_player_input",
+            "retry_count",
+            "error_messages"
         ]

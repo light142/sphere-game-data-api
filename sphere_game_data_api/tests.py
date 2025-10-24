@@ -69,7 +69,12 @@ class GameDataAPITestCase(APITestCase):
             "game_mode": "timed",
             "game_color": "red",
             "game_sequence": ["blue", "red", "yellow"],
-            "game_player_input": ["blue", "red"]
+            "game_player_input": ["blue", "red"],
+            "retry_count": 2,
+            "error_messages": [
+                "14:30:20 - ConnectionError: Connection timeout",
+                "14:30:22 - ConnectionError: Network unreachable"
+            ]
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -95,7 +100,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=1,
+            error_messages=["14:30:20 - Test error message"]
         )
         
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
@@ -118,7 +125,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
@@ -139,7 +148,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
@@ -162,7 +173,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
@@ -196,7 +209,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")
@@ -232,7 +247,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         url = reverse("game-data-rud", kwargs={"pk": game_data.pk})
@@ -253,7 +270,9 @@ class GameDataAPITestCase(APITestCase):
             game_mode="test",
             game_color="blue",
             game_sequence=["red", "blue"],
-            game_player_input=["red"]
+            game_player_input=["red"],
+            retry_count=0,
+            error_messages=[]
         )
         
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token.key}")

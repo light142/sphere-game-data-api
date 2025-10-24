@@ -15,3 +15,5 @@ class GameData(models.Model):
     game_color = models.CharField(max_length=255)
     game_sequence = models.JSONField(default=list)
     game_player_input = models.JSONField(default=list)
+    retry_count = models.IntegerField(default=0)
+    error_messages = models.JSONField(default=list)
