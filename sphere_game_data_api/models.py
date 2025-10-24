@@ -15,7 +15,6 @@ class GameData(models.Model):
     game_mode = models.CharField(max_length=255, db_index=True)  # Index for mode filtering
     game_color = models.CharField(max_length=255, blank=True, default="")
     correct_game_color = models.CharField(max_length=255, blank=True, default="")  # The correct color for this event
-    is_correct_color = models.BooleanField(null=True, blank=True)  # Whether player selected correct color (null when not applicable)
     game_sequence = models.JSONField(default=list)
     game_player_input = models.JSONField(default=list)
     retry_count = models.IntegerField(default=0)
