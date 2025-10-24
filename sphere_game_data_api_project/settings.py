@@ -171,7 +171,18 @@ SWAGGER_SETTINGS = {
             "name": "Authorization",
             "in": "header",
             "description": "Enter 'Token <your-auth-token>'",
+        },
+        "Session": {
+            "type": "apiKey",
+            "name": "X-CSRFToken",
+            "in": "header",
+            "description": "CSRF token for session authentication",
         }
     },
     "USE_SESSION_AUTH": True,
+    "SECURITY_REQUIREMENTS": [
+        {
+            "Token": []
+        }
+    ],
 }

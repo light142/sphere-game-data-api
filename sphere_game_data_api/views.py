@@ -22,8 +22,22 @@ class LoginAPIView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
+        operation_description="Login to get authentication token",
         request_body=LoginSerializer,
-        responses={200: "Login successful", 400: "Invalid credentials"},
+        responses={
+            200: openapi.Response(
+                description="Login successful",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'message': openapi.Schema(type=openapi.TYPE_STRING, example="Login successful"),
+                        'token': openapi.Schema(type=openapi.TYPE_STRING, example="2033413e311925d9a24241cbf8665fca99168f19")
+                    }
+                )
+            ),
+            400: "Invalid credentials"
+        },
+        security=[]
     )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -69,6 +83,7 @@ class GameDataListCreateView(generics.ListCreateAPIView):
     @swagger_auto_schema(
         operation_description="List all game data (Admin only)",
         responses={200: GameDataSerializer(many=True)},
+        security=[{"Token": []}]
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -77,6 +92,7 @@ class GameDataListCreateView(generics.ListCreateAPIView):
         operation_description="Create a new game data entry (Anyone can create)",
         request_body=GameDataSerializer,
         responses={201: GameDataSerializer},
+        security=[]
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -88,7 +104,9 @@ class GameDataRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
 
     @swagger_auto_schema(
-        operation_description="Retrieve game data by ID (Admin only)", responses={200: GameDataSerializer}
+        operation_description="Retrieve game data by ID (Admin only)", 
+        responses={200: GameDataSerializer},
+        security=[{"Token": []}]
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -97,12 +115,15 @@ class GameDataRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         operation_description="Update game data by ID (Admin only)",
         request_body=GameDataSerializer,
         responses={200: GameDataSerializer},
+        security=[{"Token": []}]
     )
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
     @swagger_auto_schema(
-        operation_description="Delete game data by ID (Admin only)", responses={204: "No Content"}
+        operation_description="Delete game data by ID (Admin only)", 
+        responses={204: "No Content"},
+        security=[{"Token": []}]
     )
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
