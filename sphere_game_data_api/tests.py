@@ -94,7 +94,7 @@ class GameDataAPITestCase(APITestCase):
         """Test that anonymous users cannot list game data"""
         url = reverse("game-data-list-create")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_list_game_data_admin_allowed(self):
         """Test that admin users can list game data"""
@@ -108,7 +108,7 @@ class GameDataAPITestCase(APITestCase):
         """Test that anonymous users cannot retrieve game data"""
         url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_retrieve_game_data_admin_allowed(self):
         """Test that admin users can retrieve game data"""
@@ -135,7 +135,7 @@ class GameDataAPITestCase(APITestCase):
             "game_player_input": ["red", "blue"]
         }
         response = self.client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_game_data_admin_allowed(self):
         """Test that admin users can update game data"""
@@ -162,7 +162,7 @@ class GameDataAPITestCase(APITestCase):
         """Test that anonymous users cannot delete game data"""
         url = reverse("game-data-rud", kwargs={"pk": self.game_data.pk})
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_game_data_admin_allowed(self):
         """Test that admin users can delete game data"""
