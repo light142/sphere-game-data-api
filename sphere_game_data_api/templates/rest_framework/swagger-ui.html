@@ -1,0 +1,46 @@
+{% extends "rest_framework/base.html" %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Override the authorization modal to automatically add "Token " prefix
+    const originalOpenAuth = window.ui.authActions.authorize;
+    
+    window.ui.authActions.authorize = function(payload) {
+        // If it's a Token authorization and doesn't start with "Token "
+        if (payload.Token && !payload.Token.startsWith('Token ')) {
+            payload.Token = 'Token ' + payload.Token;
+        }
+        return originalOpenAuth(payload);
+    };
+    
+    // Also handle the input field to show user what's happening
+    setTimeout(function() {
+        const authInput = document.querySelector('input[placeholder*="token"], input[name*="Token"]');
+        if (authInput) {
+            authInput.addEventListener('input', function(e) {
+                const value = e.target.value;
+                if (value && !value.startsWith('Token ')) {
+                    // Show a hint that Token prefix will be added
+                    let hint = authInput.parentNode.querySelector('.token-hint');
+                    if (!hint) {
+                        hint = document.createElement('div');
+                        hint.className = 'token-hint';
+                        hint.style.color = '#666';
+                        hint.style.fontSize = '12px';
+                        hint.style.marginTop = '5px';
+                        authInput.parentNode.appendChild(hint);
+                    }
+                    hint.textContent = 'Note: "Token " prefix will be added automatically';
+                } else {
+                    const hint = authInput.parentNode.querySelector('.token-hint');
+                    if (hint) {
+                        hint.textContent = '';
+                    }
+                }
+            });
+        }
+    }, 1000);
+});
+</script>
+{% endblock %}

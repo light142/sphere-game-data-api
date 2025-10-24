@@ -27,6 +27,7 @@ class GameDataSerializer(serializers.ModelSerializer):
             "created_at", 
             "event_at", 
             "event_type", 
+            "event_category",
             "ip_address", 
             "mac_address", 
             "session_id", 
@@ -45,6 +46,9 @@ class GameDataSerializer(serializers.ModelSerializer):
             },
             'event_type': {
                 'help_text': 'Type of game event (e.g., game_start, game_end, level_complete)'
+            },
+            'event_category': {
+                'help_text': 'Category of game event (e.g., gameplay, system, error, analytics)'
             },
             'ip_address': {
                 'help_text': 'Player IP address (IPv4 or IPv6)'
