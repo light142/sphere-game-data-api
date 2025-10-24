@@ -14,6 +14,8 @@ class GameData(models.Model):
     game_level = models.IntegerField(db_index=True)  # Index for level-based analytics
     game_mode = models.CharField(max_length=255, db_index=True)  # Index for mode filtering
     game_color = models.CharField(max_length=255, blank=True, default="")
+    correct_game_color = models.CharField(max_length=255, blank=True, default="")  # The correct color for this event
+    is_correct_color = models.BooleanField(default=False)  # Whether player selected correct color
     game_sequence = models.JSONField(default=list)
     game_player_input = models.JSONField(default=list)
     retry_count = models.IntegerField(default=0)
