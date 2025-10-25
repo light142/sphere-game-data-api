@@ -29,7 +29,7 @@ class GameDataSerializer(serializers.ModelSerializer):
             "event_type", 
             "event_category",
             "ip_address", 
-            "mac_address", 
+            "player_id", 
             "session_id", 
             "game_reference", 
             "game_level", 
@@ -54,8 +54,8 @@ class GameDataSerializer(serializers.ModelSerializer):
             'ip_address': {
                 'help_text': 'Player IP address (IPv4 or IPv6)'
             },
-            'mac_address': {
-                'help_text': 'Player MAC address (e.g., AA:BB:CC:DD:EE:FF)'
+            'player_id': {
+                'help_text': 'Player identifier (optional)'
             },
             'session_id': {
                 'help_text': 'Unique session identifier'

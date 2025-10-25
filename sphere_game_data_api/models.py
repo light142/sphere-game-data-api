@@ -8,7 +8,7 @@ class GameData(models.Model):
     event_type = models.CharField(max_length=255, db_index=True)  # Index for event type filtering
     event_category = models.CharField(max_length=255, default="general", blank=False, db_index=True)  # Index for category filtering
     ip_address = models.GenericIPAddressField(db_index=True)  # Index for IP-based queries
-    mac_address = models.CharField(max_length=17, default="00:00:00:00:00:00")  # MAC address format: XX:XX:XX:XX:XX:XX
+    player_id = models.CharField(max_length=255, blank=True, default="")  # Player identifier
     session_id = models.CharField(max_length=255, db_index=True)  # Index for session tracking
     game_reference = models.CharField(max_length=255, blank=True, default="")
     game_level = models.IntegerField(db_index=True)  # Index for level-based analytics
